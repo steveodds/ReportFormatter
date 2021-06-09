@@ -37,7 +37,7 @@ namespace ReportFormatter
             {
                 baseWorksheet.CopyTo(orderNumber);
                 var currentWorksheet = workbook.Worksheet(orderNumber);
-                currentWorksheet.Cell(4, 6).Value = orderNumber;
+                currentWorksheet.Cell(4, 6).Value = orderNumber.Replace('-', '/');
             }
 
             workbook.Save();
