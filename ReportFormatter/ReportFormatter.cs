@@ -1,9 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ClosedXML.Excel;
 
 namespace ReportFormatter
@@ -21,8 +17,16 @@ namespace ReportFormatter
 
             _reportFile = reportFile;
             _orderNumbers = orderNumbers;
+            DuplicateWorksheet();
+            return ValidateNewReport();
+        }
 
-            return true;
+        private bool ValidateNewReport()
+        {
+            //check if final report matches expected output
+            var wb = new XLWorkbook(_reportFile);
+            var worksheets = wb.Worksheets.Count;
+            return worksheets == _orderNumbers.Count + 2;
         }
 
         private void DuplicateWorksheet()
@@ -35,6 +39,8 @@ namespace ReportFormatter
                 var currentWorksheet = workbook.Worksheet(orderNumber);
                 currentWorksheet.Cell(4, 6).Value = orderNumber;
             }
+
+            workbook.Save();
         }
     }
 }
