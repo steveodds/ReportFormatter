@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClosedXML.Excel;
 
 namespace ReportFormatter
 {
@@ -24,14 +25,16 @@ namespace ReportFormatter
             return true;
         }
 
-        private bool DuplicateWorksheet()
+        private void DuplicateWorksheet()
         {
-
-        }
-
-        private bool AddOrderNumber()
-        {
-
+            var workbook = new XLWorkbook(_reportFile);
+            var baseWorksheet = workbook.Worksheet(2);
+            foreach (var orderNumber in _orderNumbers)
+            {
+                baseWorksheet.CopyTo(orderNumber);
+                var currentWorksheet = workbook.Worksheet(orderNumber);
+                currentWorksheet.Cell(4, 6).Value = orderNumber;
+            }
         }
     }
 }
